@@ -1,0 +1,15 @@
+<Solution>
+  <Folder Name="/_build/">
+    <File Path="Directory.Packages.props" />
+  </Folder>
+  <Project Path="ControlCatalog.Android/ControlCatalog.Android.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="ControlCatalog.Browser/ControlCatalog.Browser.csproj" />
+  <Project Path="ControlCatalog.Desktop/ControlCatalog.Desktop.csproj" />
+  <Project Path="ControlCatalog.iOS/ControlCatalog.iOS.csproj">
+    <Deploy />
+  </Project>
+  <Project Path="ControlCatalog/ControlCatalog.csproj" />
+  <Project Path="DocumentationSourceGen/DocumentationSourceGen.csproj" />
+</Solution>
