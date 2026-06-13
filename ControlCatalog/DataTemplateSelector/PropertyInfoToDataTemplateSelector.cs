@@ -13,7 +13,7 @@ public class PropertyInfoToDataTemplateSelector : IDataTemplate
 
     public Control? Build(object? param)
     {
-        if (param is PropertyInfo propertyInfo)
+        if (param is PropertyInfoViewModel propertyInfo)
         {
             var targetType = propertyInfo.Type;
             var isReadOnly = propertyInfo.Property.IsReadOnly;
@@ -21,7 +21,7 @@ public class PropertyInfoToDataTemplateSelector : IDataTemplate
 
             // Explicit source for all bindings - don't rely on DataContext
             CompiledBinding CreateBinding() =>
-                CompiledBinding.Create<PropertyInfo, object?>(
+                CompiledBinding.Create<PropertyInfoViewModel, object?>(
                     p => p.CurrentValue,
                     source: propertyInfo,
                     mode: bindingMode);
@@ -77,6 +77,6 @@ public class PropertyInfoToDataTemplateSelector : IDataTemplate
 
     public bool Match(object? data)
     {
-        return data is PropertyInfo;
+        return data is PropertyInfoViewModel;
     }
 }

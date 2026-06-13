@@ -6,9 +6,9 @@ using ControlCatalog.Helper;
 
 namespace ControlCatalog.ViewModels;
 
-public partial class PropertyInfo : ViewModelBase
+public partial class PropertyInfoViewModel : ViewModelBase
 {
-    public PropertyInfo(FieldInfo field)
+    public PropertyInfoViewModel(FieldInfo field)
     {
         if (typeof(AvaloniaProperty).IsAssignableFrom(field.FieldType))
         {
@@ -25,6 +25,8 @@ public partial class PropertyInfo : ViewModelBase
         }
     }
 
+    public PropertyGroupViewModel? Parent { get; set; }
+    
     public AvaloniaProperty Property { get; }
     public string Name { get; }
     public Type Type { get; }

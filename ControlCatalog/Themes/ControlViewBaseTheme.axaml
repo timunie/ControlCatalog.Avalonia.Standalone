@@ -35,22 +35,31 @@
 
                     <ScrollViewer Grid.Row="1" Grid.Column="0">
                         <ItemsControl
-                            ItemsSource="{Binding  $parent[controls:ControlViewBase].Properties}"
+                            ItemsSource="{Binding  $parent[controls:ControlViewBase].PropertyGroups}"
                             Grid.IsSharedSizeScope="True">
                             <ItemsControl.ItemTemplate>
-                                <DataTemplate DataType="viewModels:PropertyInfo">
-                                    <Grid Margin="4" ColumnSpacing="5" Background="Transparent"
-                                          ToolTip.Tip="{Binding Summary}">
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
-                                            <ColumnDefinition Width="*" />
-                                        </Grid.ColumnDefinitions>
-                                        <TextBlock Text="{Binding Name}"
-                                                   ToolTip.Tip="{Binding Summary}" />
-                                        <ContentControl Grid.Column="1"
-                                                        Content="{Binding }"
-                                                        ContentTemplate="{x:Static dataTemplateSelector:PropertyInfoToDataTemplateSelector.Instance}" />
-                                    </Grid>
+                                <DataTemplate DataType="viewModels:PropertyGroupViewModel">
+                                    <StackPanel Margin="8,12,8,4">
+                                        <TextBlock Text="{Binding Key}" FontWeight="Bold" Foreground="{DynamicResource SystemControlForegroundAccentBrush}" Margin="0,0,0,4" />
+                                        <ItemsControl ItemsSource="{Binding Items}">
+                                            <ItemsControl.ItemTemplate>
+                                                <DataTemplate DataType="viewModels:PropertyInfoViewModel">
+                                                    <Grid Margin="4" ColumnSpacing="5" Background="Transparent"
+                                                          ToolTip.Tip="{Binding Summary}">
+                                                        <Grid.ColumnDefinitions>
+                                                            <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
+                                                            <ColumnDefinition Width="*" />
+                                                        </Grid.ColumnDefinitions>
+                                                        <TextBlock Text="{Binding Name}"
+                                                                   ToolTip.Tip="{Binding Summary}" />
+                                                        <ContentControl Grid.Column="1"
+                                                                        Content="{Binding }"
+                                                                        ContentTemplate="{x:Static dataTemplateSelector:PropertyInfoToDataTemplateSelector.Instance}" />
+                                                    </Grid>
+                                                </DataTemplate>
+                                            </ItemsControl.ItemTemplate>
+                                        </ItemsControl>
+                                    </StackPanel>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>

@@ -45,7 +45,7 @@ public class TypeToInstanceDataTemplateSelector : IDataTemplate
 
                 control.Bind(
                     property.Property,
-                    CompiledBinding.Create<PropertyInfo, object?>(
+                    CompiledBinding.Create<PropertyInfoViewModel, object?>(
                         p => p.CurrentValue,
                         source: property,
                         mode: property.Property.IsReadOnly ? BindingMode.OneWay : BindingMode.TwoWay));

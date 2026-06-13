@@ -21,7 +21,7 @@ public partial class ControlViewModelBase : ViewModelBase
         
         Properties = ControlType.GetFields(BindingFlags.Static|BindingFlags.Public|BindingFlags.FlattenHierarchy)
             .Where(f => f.FieldType.IsSubclassOf(typeof(AvaloniaProperty)))
-            .Select(f => new PropertyInfo(f))
+            .Select(f => new PropertyInfoViewModel(f))
             .ToArray();
     }
     
@@ -33,5 +33,5 @@ public partial class ControlViewModelBase : ViewModelBase
     
     public Type ControlType { get; }
     
-    public PropertyInfo[] Properties { get; }
+    public PropertyInfoViewModel[] Properties { get; }
 }
