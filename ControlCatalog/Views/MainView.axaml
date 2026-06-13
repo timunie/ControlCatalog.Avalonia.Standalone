@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:vm="using:ControlCatalog.ViewModels"
              xmlns:views="clr-namespace:ControlCatalog.Views"
+             xmlns:controls="clr-namespace:ControlCatalog.Controls"
              mc:Ignorable="d" d:DesignWidth="800" d:DesignHeight="450"
              x:Class="ControlCatalog.Views.MainView"
              x:DataType="vm:MainViewModel">
@@ -13,5 +14,8 @@
         <vm:MainViewModel />
     </Design.DataContext>
     
-    <views:ControlViewBase DataContext="{Binding SelectedControlSample}" />
+    <controls:ControlViewBase>
+        <TextBox Text="This is a sample"
+                 PlaceholderText="1234"/>
+    </controls:ControlViewBase>
 </UserControl>

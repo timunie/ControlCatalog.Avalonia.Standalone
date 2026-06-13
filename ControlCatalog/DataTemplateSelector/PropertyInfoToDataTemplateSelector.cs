@@ -19,59 +19,56 @@ public class PropertyInfoToDataTemplateSelector : IDataTemplate
             var isReadOnly = propertyInfo.Property.IsReadOnly;
             var bindingMode = isReadOnly ? BindingMode.OneWay : BindingMode.TwoWay;
 
-            if (propertyInfo.Type == typeof(bool))
+            // Explicit source for all bindings - don't rely on DataContext
+            CompiledBinding CreateBinding() =>
+                CompiledBinding.Create<PropertyInfo, object?>(
+                    p => p.CurrentValue,
+                    source: propertyInfo,
+                    mode: bindingMode);
+
+            if (targetType == typeof(bool))
             {
                 return new ToggleSwitch()
                 {
-                    [!ToggleButton.IsCheckedProperty] = CompiledBinding.Create<PropertyInfo, object?>(
-                        p => p.CurrentValue,
-                        bindingMode),
+                    [!ToggleButton.IsCheckedProperty] = CreateBinding(),
                     IsEnabled = !isReadOnly
                 };
             }
 
-            if (propertyInfo.Type is var t2 && (t2 == typeof(double) || t2 == typeof(decimal)))
+            if (targetType == typeof(double) || targetType == typeof(decimal))
             {
                 return new NumericUpDown()
                 {
-                    [!NumericUpDown.ValueProperty] =
-                        CompiledBinding.Create<PropertyInfo, object?>(
-                            p => p.CurrentValue,
-                            source: propertyInfo,
-                            mode: bindingMode),
+                    [!NumericUpDown.ValueProperty] = CreateBinding(),
                     IsReadOnly = isReadOnly
                 };
             }
 
-            if (propertyInfo.Type == typeof(string))
+            if (targetType == typeof(string))
             {
                 return new TextBox()
                 {
-                    [!TextBox.TextProperty] = CompiledBinding.Create<PropertyInfo, object?>(
-                        p => p.CurrentValue,
-                        source: propertyInfo,
-                        mode: bindingMode),
+                    [!TextBox.TextProperty] = CreateBinding(),
                     IsReadOnly = isReadOnly
                 };
             }
 
             if (targetType.IsEnum)
             {
-                return new ComboBox()
+                // Use GetValues so the bound value (enum) matches items in the list
                 {
-                    ItemsSource = Enum.GetNames(targetType),
-                    [!SelectingItemsControl.SelectedItemProperty] = CompiledBinding.Create<PropertyInfo, object?>(
-                        p => p.CurrentValue,
-                        source: propertyInfo,
-                        mode: bindingMode),
-                    IsEnabled = !isReadOnly
-                };
+                    return new ComboBox()
+                    {
+                        ItemsSource = Enum.GetValues(targetType),
+                        [!SelectingItemsControl.SelectedItemProperty] = CreateBinding(),
+                        IsEnabled = !isReadOnly
+                    };
+                }
             }
-            
+
             return new TextBlock()
             {
-                [!TextBlock.TextProperty] =
-                    CompiledBinding.Create<PropertyInfo, object?>(p => p.CurrentValue)
+                [!TextBlock.TextProperty] = CreateBinding()
             };
         }
 

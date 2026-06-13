@@ -1,0 +1,71 @@
+<ResourceDictionary xmlns="https://github.com/avaloniaui"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:ControlCatalog.Controls"
+                    xmlns:viewModels="clr-namespace:ControlCatalog.ViewModels"
+                    xmlns:dataTemplateSelector="clr-namespace:ControlCatalog.DataTemplateSelector">
+
+    <ControlTheme x:Key="{x:Type controls:ControlViewBase}"
+                  TargetType="{x:Type controls:ControlViewBase}">
+        <Setter Property="Template">
+            <ControlTemplate>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" MinWidth="200" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" MinWidth="200" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+
+                    <Border BoxShadow="1 1 20 rgb(125,125,125,1)"
+                            Grid.ColumnSpan="3"
+                            BorderBrush="{DynamicResource ButtonBorderBrush}"
+                            BorderThickness="1"
+                            Background="{DynamicResource SystemControlBackgroundBaseMediumLowBrush}"
+                            Margin="10"
+                            CornerRadius="10">
+                        <StackPanel Margin="10" Spacing="5">
+                            <SelectableTextBlock Text="{TemplateBinding Header}" FontSize="20" FontWeight="Bold" />
+                            <SelectableTextBlock Text="{TemplateBinding SubHeader}" TextWrapping="Wrap" />
+                        </StackPanel>
+                    </Border>
+
+                    <ScrollViewer Grid.Row="1" Grid.Column="0">
+                        <ItemsControl
+                            ItemsSource="{Binding  $parent[controls:ControlViewBase].Properties}"
+                            Grid.IsSharedSizeScope="True">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="viewModels:PropertyInfo">
+                                    <Grid Margin="4" ColumnSpacing="5" Background="Transparent"
+                                          ToolTip.Tip="{Binding Summary}">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" SharedSizeGroup="Name" />
+                                            <ColumnDefinition Width="*" />
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock Text="{Binding Name}"
+                                                   ToolTip.Tip="{Binding Summary}" />
+                                        <ContentControl Grid.Column="1"
+                                                        Content="{Binding }"
+                                                        ContentTemplate="{x:Static dataTemplateSelector:PropertyInfoToDataTemplateSelector.Instance}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </ScrollViewer>
+
+                    <GridSplitter Grid.Row="1" Grid.Column="1"
+                                  Background="{DynamicResource ScrollViewerScrollBarsSeparatorBackground}"
+                                  CornerRadius="2" Margin="0,5">
+                    </GridSplitter>
+
+                    <ContentPresenter Grid.Row="1" Grid.Column="2"
+                                      Content="{TemplateBinding Content}"
+                                      ContentTemplate="{TemplateBinding ContentTemplate}" />
+                </Grid>
+            </ControlTemplate>
+        </Setter>
+    </ControlTheme>
+</ResourceDictionary>

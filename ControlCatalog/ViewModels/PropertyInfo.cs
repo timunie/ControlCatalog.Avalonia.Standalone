@@ -8,14 +8,16 @@ namespace ControlCatalog.ViewModels;
 
 public partial class PropertyInfo : ViewModelBase
 {
-    public PropertyInfo(FieldInfo field, AvaloniaObject owner)
+    public PropertyInfo(FieldInfo field)
     {
         if (typeof(AvaloniaProperty).IsAssignableFrom(field.FieldType))
         {
-            Property = (AvaloniaProperty)field.GetValue(owner)!;
+            Property = (AvaloniaProperty)field.GetValue(null)!;
             Name = Property.Name;
             Type = Property.PropertyType;
-            Summary = owner.GetType().GetProperty(Name)?.GetXmlSummary();
+            Summary = field.DeclaringType?
+                .GetProperty(Property.Name, BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance)?
+                .GetXmlSummary();
         }
         else
         {
@@ -28,6 +30,5 @@ public partial class PropertyInfo : ViewModelBase
     public Type Type { get; }
     public string? Summary { get; }
 
-    [ObservableProperty] 
-    public partial object? CurrentValue { get; set; }
+    [ObservableProperty] public partial object? CurrentValue { get; set; }
 }

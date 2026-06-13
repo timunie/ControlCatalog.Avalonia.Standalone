@@ -12,21 +12,18 @@ namespace ControlCatalog.ViewModels;
 /// </summary>
 public partial class ControlViewModelBase : ViewModelBase
 {
-    public ControlViewModelBase(AvaloniaObject owner)
+    public ControlViewModelBase(Type controlType)
     {
-        Owner = owner;
-        ControlType = owner.GetType();
+        ControlType = controlType;
         
         Title = ControlType.Name;
         Description = ControlType.GetXmlSummary();
         
         Properties = ControlType.GetFields(BindingFlags.Static|BindingFlags.Public|BindingFlags.FlattenHierarchy)
             .Where(f => f.FieldType.IsSubclassOf(typeof(AvaloniaProperty)))
-            .Select(f => new PropertyInfo(f, owner))
+            .Select(f => new PropertyInfo(f))
             .ToArray();
     }
-
-    public AvaloniaObject Owner { get; }
     
     [ObservableProperty] 
     public partial string? Title {get; set;}

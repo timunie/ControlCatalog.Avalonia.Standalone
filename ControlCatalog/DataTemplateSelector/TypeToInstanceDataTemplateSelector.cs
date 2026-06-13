@@ -25,28 +25,31 @@ public class TypeToInstanceDataTemplateSelector : IDataTemplate
                     Text = $"Could not create instance of type {controlViewModel.ControlType.FullName}"
                 };
             }
-            
-            // Init the property bindings only after control is attached
-            Dispatcher.UIThread.Post(() =>
-            {
-                foreach (var property in controlViewModel.Properties)
-                {
-                    property.CurrentValue = control.GetValue(property.Property);
 
-                    control.Bind(
-                        property.Property,
-                        CompiledBinding.Create<PropertyInfo, object?>(
-                            p => p.CurrentValue,
-                            source: property,
-                            mode: property.Property.IsReadOnly ? BindingMode.OneWay : BindingMode.TwoWay));
-                }
-            }, DispatcherPriority.Loaded);
-            
+            control.DataContext = controlViewModel;
+            control.AttachedToVisualTree += Contol_OnAttachedToVisualTree;
             return control;
         }
-        else
+        return null;
+    }
+
+    private void Contol_OnAttachedToVisualTree(object? sender, VisualTreeAttachmentEventArgs e)
+    {
+        if (sender is Control {DataContext: ControlViewModelBase controlViewModel} control)
         {
-            throw new ArgumentException($"Type {param?.GetType()} not supported", nameof(param));
+            control.AttachedToVisualTree -= Contol_OnAttachedToVisualTree;
+            
+            foreach (var property in controlViewModel.Properties)
+            {
+                property.CurrentValue = control.GetValue(property.Property);
+
+                control.Bind(
+                    property.Property,
+                    CompiledBinding.Create<PropertyInfo, object?>(
+                        p => p.CurrentValue,
+                        source: property,
+                        mode: property.Property.IsReadOnly ? BindingMode.OneWay : BindingMode.TwoWay));
+            }
         }
     }
 

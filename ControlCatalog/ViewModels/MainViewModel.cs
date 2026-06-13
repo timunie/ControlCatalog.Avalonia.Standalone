@@ -6,5 +6,5 @@ namespace ControlCatalog.ViewModels;
 public partial class MainViewModel : ViewModelBase
 {
     [ObservableProperty] 
-    public partial ControlViewModelBase SelectedControlSample { get; set; } = new(new TextBox());
+    public partial ControlViewModelBase SelectedControlSample { get; set; } = new(typeof(ToggleSwitch));
 }
